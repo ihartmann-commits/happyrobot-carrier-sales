@@ -1,0 +1,92 @@
+{
+  "tools": [
+    {
+      "name": "verify_carrier",
+      "description": "Verify if a carrier is authorized to operate using their MC number via the FMCSA database",
+      "type": "http",
+      "config": {
+        "method": "GET",
+        "url": "{{API_BASE_URL}}/fmcsa/verify/{{mc_number}}",
+        "headers": {
+          "X-API-Key": "{{API_KEY}}"
+        }
+      },
+      "parameters": {
+        "mc_number": {
+          "type": "string",
+          "description": "The carrier's MC number (digits only, no 'MC' prefix)"
+        }
+      }
+    },
+    {
+      "name": "search_loads",
+      "description": "Search available loads by origin, destination, and equipment type",
+      "type": "http",
+      "config": {
+        "method": "GET",
+        "url": "{{API_BASE_URL}}/loads/",
+        "headers": {
+          "X-API-Key": "{{API_KEY}}"
+        },
+        "query_params": {
+          "origin": "{{origin}}",
+          "destination": "{{destination}}",
+          "equipment_type": "{{equipment_type}}"
+        }
+      },
+      "parameters": {
+        "origin": {
+          "type": "string",
+          "description": "Origin city or state to filter loads",
+          "required": false
+        },
+        "destination": {
+          "type": "string",
+          "description": "Destination city or state to filter loads",
+          "required": false
+        },
+        "equipment_type": {
+          "type": "string",
+          "description": "Equipment type (e.g. Dry Van, Reefer, Flatbed)",
+          "required": false
+        }
+      }
+    },
+    {
+      "name": "save_call",
+      "description": "Save the call outcome, extracted data, sentiment, and classification after the call ends",
+      "type": "http",
+      "config": {
+        "method": "POST",
+        "url": "{{API_BASE_URL}}/calls/",
+        "headers": {
+          "X-API-Key": "{{API_KEY}}",
+          "Content-Type": "application/json"
+        }
+      },
+      "parameters": {
+        "mc_number": { "type": "string", "description": "Carrier MC number" },
+        "carrier_name": { "type": "string", "description": "Carrier legal name" },
+        "load_id": { "type": "string", "description": "Load ID that was discussed" },
+        "origin": { "type": "string", "description": "Load origin" },
+        "destination": { "type": "string", "description": "Load destination" },
+        "equipment_type": { "type": "string", "description": "Equipment type" },
+        "loadboard_rate": { "type": "number", "description": "Listed loadboard rate in USD" },
+        "agreed_rate": { "type": "number", "description": "Final agreed rate in USD (only if booked)" },
+        "negotiation_rounds": { "type": "integer", "description": "Number of negotiation rounds (0-3)" },
+        "outcome": {
+          "type": "string",
+          "enum": ["booked", "declined", "no_deal", "transferred", "invalid_carrier"],
+          "description": "Call outcome classification"
+        },
+        "sentiment": {
+          "type": "string",
+          "enum": ["positive", "neutral", "negative"],
+          "description": "Carrier sentiment during the call"
+        },
+        "fmcsa_verified": { "type": "boolean", "description": "Whether carrier passed FMCSA verification" },
+        "transcript_summary": { "type": "string", "description": "2-3 sentence summary of the call" }
+      }
+    }
+  ]
+}

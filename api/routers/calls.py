@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, field_validator
+from typing import Optional, Union
 from datetime import datetime
 import uuid
 import json
@@ -20,14 +20,43 @@ class CallCreate(BaseModel):
     origin: Optional[str] = None
     destination: Optional[str] = None
     equipment_type: Optional[str] = None
-    loadboard_rate: Optional[float] = None
-    agreed_rate: Optional[float] = None
-    negotiation_rounds: Optional[int] = 0
-    outcome: Optional[str] = None  # booked, declined, no_deal, transferred, invalid_carrier
-    sentiment: Optional[str] = None  # positive, neutral, negative
-    fmcsa_verified: Optional[bool] = False
+    loadboard_rate: Optional[Union[float, str]] = None
+    agreed_rate: Optional[Union[float, str]] = None
+    negotiation_rounds: Optional[Union[int, str]] = 0
+    outcome: Optional[str] = None
+    sentiment: Optional[str] = None
+    fmcsa_verified: Optional[Union[bool, str]] = False
     transcript_summary: Optional[str] = None
     raw_data: Optional[dict] = None
+
+    @field_validator("loadboard_rate", "agreed_rate", mode="before")
+    @classmethod
+    def parse_float(cls, v):
+        if v in (None, "", "null", "None"):
+            return None
+        try:
+            return float(v)
+        except (ValueError, TypeError):
+            return None
+
+    @field_validator("negotiation_rounds", mode="before")
+    @classmethod
+    def parse_int(cls, v):
+        if v in (None, "", "null", "None"):
+            return 0
+        try:
+            return int(float(str(v)))
+        except (ValueError, TypeError):
+            return 0
+
+    @field_validator("fmcsa_verified", mode="before")
+    @classmethod
+    def parse_bool(cls, v):
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            return v.lower() in ("true", "1", "yes")
+        return bool(v)
 
 
 @router.post("/")

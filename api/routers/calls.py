@@ -16,6 +16,9 @@ router = APIRouter(prefix="/calls", tags=["calls"])
 class CallCreate(BaseModel):
     mc_number: Optional[str] = None
     carrier_name: Optional[str] = None
+    contact_name: Optional[str] = None
+    contact_phone: Optional[str] = None
+    contact_email: Optional[str] = None
     load_id: Optional[str] = None
     origin: Optional[str] = None
     destination: Optional[str] = None
@@ -74,6 +77,9 @@ async def create_call(
         origin=call.origin,
         destination=call.destination,
         equipment_type=call.equipment_type,
+        contact_name=call.contact_name,
+        contact_phone=call.contact_phone,
+        contact_email=call.contact_email,
         loadboard_rate=call.loadboard_rate,
         agreed_rate=call.agreed_rate,
         negotiation_rounds=call.negotiation_rounds or 0,
@@ -165,6 +171,9 @@ def _serialize(r: CallRecord) -> dict:
         "created_at": r.created_at.isoformat() if r.created_at else None,
         "mc_number": r.mc_number,
         "carrier_name": r.carrier_name,
+        "contact_name": r.contact_name,
+        "contact_phone": r.contact_phone,
+        "contact_email": r.contact_email,
         "load_id": r.load_id,
         "origin": r.origin,
         "destination": r.destination,

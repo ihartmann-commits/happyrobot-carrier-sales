@@ -22,7 +22,7 @@ async def verify_carrier(mc_number: str, _: str = Depends(verify_api_key)):
     api_key = os.getenv("FMCSA_API_KEY")
 
     # Try real FMCSA API first
-    url = f"{FMCSA_BASE}/mc/{mc_number}?webKey={api_key}"
+    url = f"{FMCSA_BASE}/docket-number/{mc_number}?webKey={api_key}"
     try:
         async with httpx.AsyncClient(timeout=10) as client:
             resp = await client.get(url)

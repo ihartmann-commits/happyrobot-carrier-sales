@@ -28,18 +28,20 @@ async def verify_carrier(mc_number: str, _: str = Depends(verify_api_key)):
             resp = await client.get(url)
             if resp.status_code == 200:
                 data = resp.json()
-                carrier = data.get("content", {}).get("carrier", {})
-                if carrier:
-                    allowed_to_operate = carrier.get("allowedToOperate", "N")
-                    eligible = allowed_to_operate == "Y"
-                    return {
-                        "eligible": eligible,
-                        "reason": "Carrier is authorized to operate" if eligible else "Carrier is NOT authorized to operate",
-                        "mc_number": mc_number,
-                        "dot_number": carrier.get("dotNumber", ""),
-                        "legal_name": carrier.get("legalName", "Unknown"),
-                        "allowed_to_operate": allowed_to_operate,
-                    }
+                content = data.get("content", [])
+                if content and len(content) > 0:
+                    carrier = content[0].get("carrier", {})
+                    if carrier:
+                        allowed_to_operate = carrier.get("allowedToOperate", "N")
+                        eligible = allowed_to_operate == "Y"
+                        return {
+                            "eligible": eligible,
+                            "reason": "Carrier is authorized to operate" if eligible else "Carrier is NOT authorized to operate",
+                            "mc_number": mc_number,
+                            "dot_number": str(carrier.get("dotNumber", "")),
+                            "legal_name": carrier.get("legalName", "Unknown"),
+                            "allowed_to_operate": allowed_to_operate,
+                        }
     except httpx.RequestError:
         pass
 

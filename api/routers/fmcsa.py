@@ -18,7 +18,16 @@ MOCK_CARRIERS = {
 
 
 @router.get("/verify/{mc_number}")
-async def verify_carrier(mc_number: str, _: str = Depends(verify_api_key)):
+async def verify_carrier_path(mc_number: str, _: str = Depends(verify_api_key)):
+    return await _verify(mc_number)
+
+
+@router.get("/verify")
+async def verify_carrier(mc_number: str = "", _: str = Depends(verify_api_key)):
+    return await _verify(mc_number)
+
+
+async def _verify(mc_number: str):
     api_key = os.getenv("FMCSA_API_KEY")
 
     # Try real FMCSA API first

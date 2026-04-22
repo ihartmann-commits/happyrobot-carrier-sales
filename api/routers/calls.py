@@ -38,7 +38,7 @@ class CallCreate(BaseModel):
         if v in (None, "", "null", "None"):
             return None
         try:
-            return float(v)
+            return float(str(v).replace("$", "").replace(",", "").strip())
         except (ValueError, TypeError):
             return None
 

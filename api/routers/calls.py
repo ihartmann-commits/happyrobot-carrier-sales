@@ -143,7 +143,7 @@ async def get_metrics(
             verified_count += 1
         total_rounds += r.negotiation_rounds or 0
 
-    savings = total_loadboard - total_agreed if booked_count else 0
+    paid_over_listed = total_agreed - total_loadboard if booked_count else 0
 
     return {
         "total_calls": total,
@@ -154,7 +154,7 @@ async def get_metrics(
         "avg_negotiation_rounds": round(total_rounds / total, 1),
         "avg_loadboard_rate": round(total_loadboard / total, 2) if total else 0,
         "avg_agreed_rate": round(total_agreed / booked_count, 2) if booked_count else 0,
-        "total_savings_vs_loadboard": round(savings, 2),
+        "total_savings_vs_loadboard": round(abs(paid_over_listed), 2),
     }
 
 

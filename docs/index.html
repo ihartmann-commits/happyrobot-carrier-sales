@@ -174,19 +174,20 @@ function renderTable(calls) {
       <td>${c.load_id || '—'}</td>
       <td>${c.origin || '—'} → ${c.destination || '—'}</td>
       <td>${c.pickup_time || '—'}</td>
+      <td>${c.commodity_type || '—'}</td>
+      <td>${c.dimensions || '—'}</td>
       <td>${c.loadboard_rate ? '$' + c.loadboard_rate.toLocaleString() : '—'}</td>
       <td>${c.agreed_rate ? '$' + c.agreed_rate.toLocaleString() : '—'}</td>
       <td>${c.negotiation_rounds ?? 0}</td>
       <td><span class="badge ${c.outcome}">${c.outcome || '—'}</span></td>
       <td><span class="badge ${c.sentiment}">${c.sentiment || '—'}</span></td>
-      <td>${c.fmcsa_verified ? '✓' : '✗'}</td>
     </tr>`).join('');
 
   document.getElementById('tableContainer').innerHTML = `
     <table>
       <thead><tr>
         <th>Time</th><th>MC#</th><th>Carrier</th><th>Load</th><th>Route</th>
-        <th>Pickup</th><th>Listed Rate</th><th>Agreed Rate</th><th>Rounds</th><th>Outcome</th><th>Sentiment</th><th>FMCSA</th>
+        <th>Pickup</th><th>Commodity</th><th>Dimensions</th><th>Listed Rate</th><th>Agreed Rate</th><th>Rounds</th><th>Outcome</th><th>Sentiment</th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;

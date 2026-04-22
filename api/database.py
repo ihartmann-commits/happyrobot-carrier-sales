@@ -38,6 +38,8 @@ class CallRecord(Base):
     sentiment = Column(String, nullable=True)  # positive, neutral, negative
     fmcsa_verified = Column(Integer, default=0)  # 0 = false, 1 = true
     pickup_time = Column(String, nullable=True)
+    commodity_type = Column(String, nullable=True)
+    dimensions = Column(String, nullable=True)
     transcript_summary = Column(Text, nullable=True)
     raw_data = Column(Text, nullable=True)
 

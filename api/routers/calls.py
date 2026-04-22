@@ -30,6 +30,8 @@ class CallCreate(BaseModel):
     sentiment: Optional[str] = None
     fmcsa_verified: Optional[Union[bool, str]] = False
     pickup_time: Optional[str] = None
+    commodity_type: Optional[str] = None
+    dimensions: Optional[str] = None
     transcript_summary: Optional[str] = None
     raw_data: Optional[dict] = None
 
@@ -88,6 +90,8 @@ async def create_call(
         sentiment=call.sentiment,
         fmcsa_verified=1 if call.fmcsa_verified else 0,
         pickup_time=call.pickup_time,
+        commodity_type=call.commodity_type,
+        dimensions=call.dimensions,
         transcript_summary=call.transcript_summary,
         raw_data=json.dumps(call.raw_data) if call.raw_data else None,
     )
@@ -187,5 +191,7 @@ def _serialize(r: CallRecord) -> dict:
         "sentiment": r.sentiment,
         "fmcsa_verified": bool(r.fmcsa_verified),
         "pickup_time": r.pickup_time,
+        "commodity_type": r.commodity_type,
+        "dimensions": r.dimensions,
         "transcript_summary": r.transcript_summary,
     }

@@ -173,6 +173,7 @@ function renderTable(calls) {
       <td>${c.carrier_name || '—'}</td>
       <td>${c.load_id || '—'}</td>
       <td>${c.origin || '—'} → ${c.destination || '—'}</td>
+      <td>${c.pickup_time || '—'}</td>
       <td>${c.loadboard_rate ? '$' + c.loadboard_rate.toLocaleString() : '—'}</td>
       <td>${c.agreed_rate ? '$' + c.agreed_rate.toLocaleString() : '—'}</td>
       <td>${c.negotiation_rounds ?? 0}</td>
@@ -185,7 +186,7 @@ function renderTable(calls) {
     <table>
       <thead><tr>
         <th>Time</th><th>MC#</th><th>Carrier</th><th>Load</th><th>Route</th>
-        <th>Listed Rate</th><th>Agreed Rate</th><th>Rounds</th><th>Outcome</th><th>Sentiment</th><th>FMCSA</th>
+        <th>Pickup</th><th>Listed Rate</th><th>Agreed Rate</th><th>Rounds</th><th>Outcome</th><th>Sentiment</th><th>FMCSA</th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;

@@ -37,6 +37,7 @@ class CallRecord(Base):
     outcome = Column(String, nullable=True)  # booked, declined, no_deal, transferred, invalid_carrier
     sentiment = Column(String, nullable=True)  # positive, neutral, negative
     fmcsa_verified = Column(Integer, default=0)  # 0 = false, 1 = true
+    pickup_time = Column(String, nullable=True)
     transcript_summary = Column(Text, nullable=True)
     raw_data = Column(Text, nullable=True)
 
